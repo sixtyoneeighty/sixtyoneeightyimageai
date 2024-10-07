@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     // Generate image using Together.ai
     const response = await together.imageGeneration.create({
       prompt: enhancedPrompt,
-      model: "black-forest-labs/FLUX.1.1-pro",
+      model: "black-forest-labs/FLUX1.1-pro",
       width: 1024,
       height: 768,
       n: 1,
