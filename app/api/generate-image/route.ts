@@ -107,7 +107,7 @@ export async function POST(req: Request) {
     console.log('Together.ai API Response:', response); // Log the entire response object
     return NextResponse.json({
       enhancedPrompt,
-      imageUrl: response.url // Corrected property access
+      imageUrl: response.data.url // Corrected property access based on actual structure
     });
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
