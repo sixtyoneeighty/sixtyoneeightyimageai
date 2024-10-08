@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'AI Text-to-Image Generator',
+  title: 'sixtyoneeighty AI Image Generator',
   description: 'Generate images from text using AI',
   manifest: '/manifest.json',
 };
