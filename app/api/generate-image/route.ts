@@ -105,7 +105,7 @@ export async function POST(req: Request) {
 
     console.timeEnd('Image Generation'); // End time measurement
     console.log('Together.ai API Full Response:', response); // Log the entire response object
-    if (!response || !response.data || !response.data[0] || !response.data[0].url) {
+    if (!response || !response.data || !response.data[0] || !('url' in response.data[0])) {
       throw new Error('Invalid response from Together.ai');
     }
 
