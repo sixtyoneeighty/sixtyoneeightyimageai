@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import Together from 'together-ai';
 
-// Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,  // Ensure the key is added in your environment
+  apiKey: process.env.OPENAI_API_KEY,
 });
+
+const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
 
 export async function POST(req: Request) {
   try {
@@ -90,39 +92,23 @@ export async function POST(req: Request) {
       }
     }
 
-    // Call the image generation API with the (possibly enhanced) prompt
-    const imageResponse = await fetch('https://api.together.ai/images/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.TOGETHER_API_KEY}`
-      },
-      body: JSON.stringify({
-        prompt: enhancedPrompt,
-        model: 'black-forest-labs/FLUX.1.1-pro',
-        width: 1024,
-        height: 768,
-        steps: 1,
-        n: 1,
-        response_format: 'url', // Adjust as per Together API response format
-      })
+    // Generate image using Together.ai with the (possibly enhanced) prompt
+    console.time('Image Generation'); // Measure time taken for image generation
+    const response = await together.images.create({
+      model: "black-forest-labs/FLUX.1.1-pro",
+      prompt: enhancedPrompt,
+      width: 1024,
+      height: 768,
+      steps: 1,
+      n: 1
     });
 
-    const imageText = await imageResponse.text(); // Capture the raw response text
-
-    try {
-      const imageData = JSON.parse(imageText); // Attempt to parse the JSON
-      return NextResponse.json({
-        enhancedPrompt,
-        data: imageData.data  // Assuming `data` contains image URLs or base64
-      });
-    } catch (error) {
-      console.error('Failed to parse JSON:', imageText); // Log the raw response for debugging
-      return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
-    }
-
+    console.timeEnd('Image Generation'); // End time measurement
+    console.log(response.data[0].b64_json);
+    return NextResponse.json(response);
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
-    return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: 'Failed to generate image', details: errorMessage }, { status: 500 });
   }
 }
