@@ -1,3 +1,8 @@
+Based on the Together.ai API response you provided, the correct property to access the image URL is `url`.
+
+Here’s the corrected version of your `route.ts` file:
+
+```typescript
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import Together from 'together-ai';
@@ -107,7 +112,7 @@ export async function POST(req: Request) {
     console.log('Together.ai API Response:', response.data[0]); // Log the entire response object
     return NextResponse.json({
       enhancedPrompt,
-      imageUrl: response.data[0] // Log the data object to inspect its structure
+      imageUrl: response.data[0].url // Corrected property access
     });
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
@@ -115,3 +120,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Failed to generate image', details: errorMessage }, { status: 500 });
   }
 }
+```
+
+Replace your existing `route.ts` file with the above code and redeploy your application. This should resolve the compilation error.
