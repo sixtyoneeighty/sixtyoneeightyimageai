@@ -104,10 +104,10 @@ export async function POST(req: Request) {
     });
 
     console.timeEnd('Image Generation'); // End time measurement
-    console.log(response.data[0].b64_json);
+    console.log(response.data[0].url);
     return NextResponse.json({
       enhancedPrompt,
-      image: response.data[0].b64_json // Assuming the image is returned as base64
+      imageUrl: response.data[0].url // Assuming the image is returned as a URL
     });
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
