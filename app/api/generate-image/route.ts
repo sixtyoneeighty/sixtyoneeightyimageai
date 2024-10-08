@@ -20,27 +20,15 @@ export async function POST(req: Request) {
       height: 768,
       steps: 1,
       n: 1,
+      response_format: "b64_json"
     });
+
     console.timeEnd('Image Generation');
-
-    console.log('API Response:', JSON.stringify(response, null, 2));
-
-    if (!response || !response.data || response.data.length === 0) {
-      console.error('No data received from Together.ai');
-      return NextResponse.json({ error: 'No data received from image generation API' }, { status: 500 });
-    }
-
-    const imageBase64 = response.data[0]?.b64_json;
-
-    if (!imageBase64) {
-      console.error('Image data is missing in the response');
-      return NextResponse.json({ error: 'Image data is missing in the API response' }, { status: 500 });
-    }
-
-    // Return the base64 encoded image data directly
-    return NextResponse.json({ imageData: imageBase64 });
+    console.log(response.data[0].b64_json);
+    return NextResponse.json(response);
   } catch (error) {
     console.error('Error generating image:', error);
-    return NextResponse.json({ error: 'Failed to generate image', details: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: 'Failed to generate image', details: errorMessage }, { status: 500 });
   }
 }
