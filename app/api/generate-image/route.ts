@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import { Together } from 'together-ai';
+import Together from 'together-ai';
 import OpenAI from 'openai';
+import fs from 'fs';
+import path from 'path';
 
 const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -13,17 +15,31 @@ export async function POST(req: Request) {
     const enhancedPrompt = await enhancePrompt(prompt);
 
     // Generate image using Together.ai
-    const response = await together.imageGeneration.create({
+    const response = await together.images.create({
+      model: "black-forest-labs/FLUX.1.1-pro",
       prompt: enhancedPrompt,
-      model: "black-forest-labs/FLUX1.1-pro",
       width: 1024,
       height: 768,
+      steps: 1,
       n: 1,
     });
 
-    const imageUrl = response.data[0].url;
+    if (!response || !response.data || response.data.length === 0) {
+      throw new Error('No image output received from Together.ai');
+    }
 
-    return NextResponse.json({ imageUrl });
+    const imageBase64 = response.data[0].b64_json;
+
+    // Decode base64 image data
+    const imageBuffer = Buffer.from(imageBase64, 'base64');
+
+    // Define the path to save the image
+    const imagePath = path.join(__dirname, 'generated_image.png');
+
+    // Save the image to the file system
+    fs.writeFileSync(imagePath, imageBuffer);
+
+    return NextResponse.json({ imageUrl: imagePath });
   } catch (error) {
     console.error('Error generating image:', error);
     return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
@@ -32,7 +48,7 @@ export async function POST(req: Request) {
 
 async function enhancePrompt(prompt: string): Promise<string> {
   const response = await openai.chat.completions.create({
-    model: "gpt-4",
+    model: "chatgpt-4o-latest",
     messages: [
       {
         role: "system",
