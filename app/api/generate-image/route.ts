@@ -108,11 +108,18 @@ export async function POST(req: Request) {
       })
     });
 
-    const imageData = await imageResponse.json();
-    return NextResponse.json({
-      enhancedPrompt,
-      data: imageData.data  // Assuming `data` contains image URLs or base64
-    });
+    const imageText = await imageResponse.text(); // Capture the raw response text
+
+    try {
+      const imageData = JSON.parse(imageText); // Attempt to parse the JSON
+      return NextResponse.json({
+        enhancedPrompt,
+        data: imageData.data  // Assuming `data` contains image URLs or base64
+      });
+    } catch (error) {
+      console.error('Failed to parse JSON:', imageText); // Log the raw response for debugging
+      return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
+    }
 
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
