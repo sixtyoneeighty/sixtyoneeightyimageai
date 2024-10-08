@@ -104,7 +104,7 @@ export async function POST(req: Request) {
     });
 
     console.timeEnd('Image Generation'); // End time measurement
-    console.log(response.data[0].url);
+    console.log('Together.ai API Response:', response.data[0]); // Log the entire response object
     return NextResponse.json({
       enhancedPrompt,
       imageUrl: response.data[0].url // Assuming the image is returned as a URL
