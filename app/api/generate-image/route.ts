@@ -105,13 +105,13 @@ export async function POST(req: Request) {
 
     console.timeEnd('Image Generation'); // End time measurement
     console.log('Together.ai API Full Response:', response); // Log the entire response object
-    if (!response || !response.data || !response.data[0] || !response.data[0].b64_json) {
+    if (!response || !response.data || !response.data[0] || !response.data[0].url) {
       throw new Error('Invalid response from Together.ai');
     }
 
     return NextResponse.json({
       enhancedPrompt,
-      imageUrl: response.data[0].b64_json // Corrected property access based on actual structure
+      imageUrl: response.data[0].url // Corrected property access to `url`
     });
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
