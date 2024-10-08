@@ -6,7 +6,6 @@ const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
 export async function POST(req: Request) {
   try {
     const { prompt } = await req.json();
-
     console.log('Received prompt:', prompt);
 
     // Measure time taken for image generation
@@ -19,8 +18,7 @@ export async function POST(req: Request) {
       width: 1024,
       height: 768,
       steps: 1,
-      n: 1,
-      response_format: "b64_json"
+      n: 1
     });
 
     console.timeEnd('Image Generation');
