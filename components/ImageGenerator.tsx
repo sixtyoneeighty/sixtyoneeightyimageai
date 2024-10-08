@@ -35,18 +35,37 @@ const ImageGenerator = () => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Enter prompt"
-      />
-      <button onClick={generateImage} disabled={loading}>
-        {loading ? 'Generating...' : 'Generate Image'}
-      </button>
-      {error && <p>Error: {error}</p>}
-      {image && <img src={image} alt="Generated" onError={() => setError('Failed to load image')} />}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-8 text-gray-900">AI Image Generator</h1>
+      <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
+        <input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Enter a prompt"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500"
+        />
+        <button
+          onClick={generateImage}
+          disabled={loading}
+          className={`mt-4 w-full py-2 px-4 rounded-md text-white font-semibold ${
+            loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+          }`}
+        >
+          {loading ? 'Generating...' : 'Generate Image'}
+        </button>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+      </div>
+      {image && (
+        <div className="mt-8">
+          <img
+            src={image}
+            alt="Generated"
+            className="w-full max-w-lg rounded-lg shadow-lg"
+            onError={() => setError('Failed to load image')}
+          />
+        </div>
+      )}
     </div>
   );
 };
