@@ -40,6 +40,10 @@ const ImageGenerator = () => {
     }
   };
 
+  const clearPrompt = () => {
+    setPrompt('');
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       {/* Replace title with logo image */}
@@ -51,12 +55,12 @@ const ImageGenerator = () => {
         className="mb-8"
       />
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
-        <input
-          type="text"
+        <label className="block mb-2 text-gray-700 font-semibold">Prompt:</label>
+        <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="Enter your idea here. Our AI enhances, optimizes, and generates your image."
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 text-white"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 text-white h-28"
         />
         <div className="mt-4">
           <label className="inline-flex items-center">
@@ -77,6 +81,12 @@ const ImageGenerator = () => {
           }`}
         >
           {loading ? 'Generating...' : 'Generate Image'}
+        </button>
+        <button
+          onClick={clearPrompt}
+          className="mt-2 w-full py-2 px-4 rounded-md text-white font-semibold bg-gray-700 hover:bg-gray-800"
+        >
+          Clear
         </button>
         {error && <p className="text-red-500 mt-4">{error}</p>}
         {image && (
