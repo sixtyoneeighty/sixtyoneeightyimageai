@@ -44,7 +44,7 @@ const ImageGenerator = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       {/* Replace title with logo image */}
       <Image
-        src="/images/logo.png"
+        src="/newimageai/images/logo.png"
         alt="Logo"
         width={200}
         height={100}
