@@ -60,7 +60,7 @@ const ImageGenerator = () => {
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Enter your idea here. Our AI enhances, optimizes, and generates your image."
+          placeholder="Enter your idea here. Our AI enhances, optimizes, and generates your image. It will then appear below"
           className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 text-white h-28"
         />
         <div className="mt-4">
