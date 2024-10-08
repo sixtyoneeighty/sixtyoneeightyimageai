@@ -21,9 +21,9 @@ const ImageGenerator = () => {
       });
 
       const data = await response.json();
-      console.log('Image generation response:', data); // Added logging for debugging
-      if (response.ok && data?.data[0]?.b64_json) {
-        setImage(`data:image/png;base64,${data.data[0].b64_json}`);
+      console.log('Image generation response:', data); // Debugging log
+      if (response.ok && data?.data[0]?.url) {
+        setImage(data.data[0].url);  // Handle the image URL
       } else {
         setError(data.error || 'Failed to generate image');
       }
