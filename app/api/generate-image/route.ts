@@ -27,7 +27,11 @@ export async function POST(req: Request) {
       throw new Error('No image output received from Together.ai');
     }
 
-    const imageBase64 = response.data[0].b64_json;
+    const imageBase64 = response.data[0]?.b64_json;
+
+    if (!imageBase64) {
+      throw new Error('Image data is missing in the response');
+    }
 
     // Decode base64 image data
     const imageBuffer = Buffer.from(imageBase64, 'base64');
