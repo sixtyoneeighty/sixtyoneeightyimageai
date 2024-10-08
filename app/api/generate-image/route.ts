@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
@@ -14,12 +15,12 @@ export async function POST(req: Request) {
 
     // Enhance the prompt with OpenAI if not skipped
     if (!skipEnhancement) {
-      const promptInstructions = `
+      const promptInstructions = \`
       You are an AI assistant specializing in refining user prompts for the Flux image generation model. 
       Flux requires two complementary prompts that work together to create one cohesive image. 
       When refining user prompts, follow these guidelines:
 
-      Topic: ${prompt}
+      Topic: \${prompt}
 
       1. Enhanced Prompt (Natural Language):
       - Provide an extremely detailed description of the image in natural language, using up to 512 tokens.
@@ -59,22 +60,35 @@ export async function POST(req: Request) {
       Present your response in this format with no additional information or elaboration included:
       Enhanced Prompt: [Detailed natural language description]
       Keywords: [Concise keyword list]
-      `;
+      \`;
 
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",  // You can switch this to "gpt-3.5-turbo" if desired
-        messages: [
-          { role: "system", content: promptInstructions },
-          { role: "user", content: prompt }
-        ],
-        temperature: 0.8,
-        max_tokens: 2048,
-        top_p: 0.9,
-        frequency_penalty: 0.5,
-        presence_penalty: 0.3,
-      });
+      // Log OpenAI response for debugging
+      try {
+        const response = await openai.chat.completions.create({
+          model: "gpt-4",  // You can switch this to "gpt-3.5-turbo" if desired
+          messages: [
+            { role: "system", content: promptInstructions },
+            { role: "user", content: prompt }
+          ],
+          temperature: 0.8,
+          max_tokens: 2048,
+          top_p: 0.9,
+          frequency_penalty: 0.5,
+          presence_penalty: 0.3,
+        });
 
-      enhancedPrompt = response.choices[0].message.content;
+        // Log the OpenAI response to check for issues
+        console.log('OpenAI API Response:', response);
+
+        // Ensure that a valid enhanced prompt is returned
+        enhancedPrompt = response.choices[0]?.message?.content;
+        if (!enhancedPrompt) {
+          throw new Error('Invalid response from OpenAI');
+        }
+      } catch (error) {
+        console.error('Error in OpenAI prompt enhancement:', error);
+        return NextResponse.json({ error: 'Failed to enhance prompt with OpenAI' }, { status: 500 });
+      }
     }
 
     // Call the image generation API with the (possibly enhanced) prompt
@@ -82,7 +96,7 @@ export async function POST(req: Request) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.TOGETHER_API_KEY}`
+        'Authorization': `Bearer \${process.env.TOGETHER_API_KEY}`
       },
       body: JSON.stringify({
         prompt: enhancedPrompt,
@@ -96,7 +110,6 @@ export async function POST(req: Request) {
     });
 
     const imageData = await imageResponse.json();
-
     return NextResponse.json({
       enhancedPrompt,
       data: imageData.data  // Assuming `data` contains image URLs or base64
@@ -107,3 +120,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
   }
 }
+
