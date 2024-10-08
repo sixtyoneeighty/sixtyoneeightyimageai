@@ -10,6 +10,7 @@ const ImageGenerator = () => {
   const [error, setError] = useState<string | null>(null);
   const [enhancedPrompt, setEnhancedPrompt] = useState<string | null>(null);
   const [skipEnhancement, setSkipEnhancement] = useState(false); // Toggle for skipping enhancement
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Toggle for dropdown
 
   const generateImage = async () => {
     setLoading(true);
@@ -100,10 +101,20 @@ const ImageGenerator = () => {
           </div>
         )}
         {enhancedPrompt && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-md">
-            <p className="text-indigo-700">
-              <strong>Enhanced Prompt:</strong> {enhancedPrompt}
-            </p>
+          <div className="mt-4">
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="w-full py-2 px-4 rounded-md text-white font-semibold bg-indigo-600 hover:bg-indigo-700"
+            >
+              {dropdownOpen ? 'Hide Enhanced Prompt' : 'Click to see your enhanced prompt'}
+            </button>
+            {dropdownOpen && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-md">
+                <p className="text-indigo-700">
+                  <strong>Enhanced Prompt:</strong> {enhancedPrompt}
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
