@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
@@ -15,12 +14,12 @@ export async function POST(req: Request) {
 
     // Enhance the prompt with OpenAI if not skipped
     if (!skipEnhancement) {
-      const promptInstructions = \`
+      const promptInstructions = `
       You are an AI assistant specializing in refining user prompts for the Flux image generation model. 
       Flux requires two complementary prompts that work together to create one cohesive image. 
       When refining user prompts, follow these guidelines:
 
-      Topic: \${prompt}
+      Topic: ${prompt}
 
       1. Enhanced Prompt (Natural Language):
       - Provide an extremely detailed description of the image in natural language, using up to 512 tokens.
@@ -60,12 +59,12 @@ export async function POST(req: Request) {
       Present your response in this format with no additional information or elaboration included:
       Enhanced Prompt: [Detailed natural language description]
       Keywords: [Concise keyword list]
-      \`;
+      `;
 
       // Log OpenAI response for debugging
       try {
         const response = await openai.chat.completions.create({
-          model: "gpt-4",  // You can switch this to "gpt-3.5-turbo" if desired
+          model: "gpt-4o-mini",  // You can switch this to "gpt-3.5-turbo" if desired
           messages: [
             { role: "system", content: promptInstructions },
             { role: "user", content: prompt }
@@ -96,7 +95,7 @@ export async function POST(req: Request) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer \${process.env.TOGETHER_API_KEY}`
+        'Authorization': `Bearer ${process.env.TOGETHER_API_KEY}`
       },
       body: JSON.stringify({
         prompt: enhancedPrompt,
@@ -120,4 +119,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Failed to generate image' }, { status: 500 });
   }
 }
-
