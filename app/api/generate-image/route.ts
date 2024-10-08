@@ -104,10 +104,10 @@ export async function POST(req: Request) {
     });
 
     console.timeEnd('Image Generation'); // End time measurement
-    console.log('Together.ai API Response:', response.data[0]); // Log the entire response object
+    console.log('Together.ai API Response:', response); // Log the entire response object
     return NextResponse.json({
       enhancedPrompt,
-      imageUrl: response.data[0].url // Corrected property access
+      imageUrl: response.url // Corrected property access
     });
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
