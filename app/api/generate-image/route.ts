@@ -12,7 +12,11 @@ export async function POST(req: Request) {
     const { prompt } = await req.json();
 
     // Enhance prompt using OpenAI
+    // Measure time taken for prompt enhancement
+    console.time('Prompt Enhancement');
     const enhancedPrompt = await enhancePrompt(prompt);
+    // Measure time taken for image generation
+    console.time('Image Generation');
 
     // Generate image using Together.ai
     const response = await together.images.create({
@@ -23,6 +27,7 @@ export async function POST(req: Request) {
       steps: 1,
       n: 1,
     });
+    console.timeEnd('Image Generation');
 
     if (!response || !response.data || response.data.length === 0) {
       throw new Error('No image output received from Together.ai');
