@@ -50,8 +50,8 @@ const ImageGenerator = () => {
       <Image
         src="/images/logo.png"
         alt="Logo"
-        width={200}
-        height={100}
+        width={400}
+        height={200}
         className="mb-8"
       />
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
