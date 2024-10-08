@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image'; // Import Image component for optimized image handling
 
 const ImageGenerator = () => {
   const [prompt, setPrompt] = useState('');
@@ -41,14 +42,21 @@ const ImageGenerator = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold mb-8 text-gray-900">AI Image Generator</h1>
+      {/* Replace title with logo image */}
+      <Image
+        src="/images/logo.png"
+        alt="Logo"
+        width={200}
+        height={100}
+        className="mb-8"
+      />
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
         <input
           type="text"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Enter a prompt"
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500"
+          placeholder="Enter your idea here. Our AI enhances, optimizes, and generates your image."
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 text-white"
         />
         <div className="mt-4">
           <label className="inline-flex items-center">
