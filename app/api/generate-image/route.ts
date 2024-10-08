@@ -105,7 +105,10 @@ export async function POST(req: Request) {
 
     console.timeEnd('Image Generation'); // End time measurement
     console.log(response.data[0].b64_json);
-    return NextResponse.json(response);
+    return NextResponse.json({
+      enhancedPrompt,
+      image: response.data[0].b64_json // Assuming the image is returned as base64
+    });
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
