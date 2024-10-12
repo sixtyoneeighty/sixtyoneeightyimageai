@@ -97,8 +97,8 @@ export async function POST(req: Request) {
     const response = await together.images.create({
       model: "black-forest-labs/FLUX.1.1-pro",
       prompt: enhancedPrompt,
-      width: 2048,
-      height: 1152,
+      width: 1440,
+      height: 810,
       steps: 1,
       n: 1
     });
