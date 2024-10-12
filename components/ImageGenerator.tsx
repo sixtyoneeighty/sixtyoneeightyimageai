@@ -1,7 +1,7 @@
-"use client";
-
 import React, { useState } from 'react';
-import Image from 'next/image'; // Import Image component for optimized image handling
+import Image from 'next/image';
+import Lightbox from 'react-image-lightbox';
+import 'react-image-lightbox/style.css';
 
 const ImageGenerator = () => {
   const [prompt, setPrompt] = useState('');
@@ -9,8 +9,9 @@ const ImageGenerator = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [enhancedPrompt, setEnhancedPrompt] = useState<string | null>(null);
-  const [skipEnhancement, setSkipEnhancement] = useState(false); // Toggle for skipping enhancement
-  const [dropdownOpen, setDropdownOpen] = useState(false); // Toggle for dropdown
+  const [skipEnhancement, setSkipEnhancement] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const generateImage = async () => {
     setLoading(true);
@@ -26,11 +27,11 @@ const ImageGenerator = () => {
       });
 
       const data = await response.json();
-      console.log('Image generation response:', data); // Debugging log
+      console.log('Image generation response:', data);
 
       if (response.ok && data.imageUrl) {
-        setImage(data.imageUrl);  // Handle the image URL correctly
-        setEnhancedPrompt(data.enhancedPrompt); // Save enhanced prompt for display
+        setImage(data.imageUrl);
+        setEnhancedPrompt(data.enhancedPrompt);
       } else {
         setError(data.error || 'Failed to generate image');
       }
@@ -47,7 +48,6 @@ const ImageGenerator = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black">
-      {/* Replace title with logo image */}
       <Image
         src="/images/logo.png"
         alt="Logo"
@@ -60,7 +60,7 @@ const ImageGenerator = () => {
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Share your vision here. Our AI will refine and enhance your idea to create a stunning image, which will appear below is only a few seconds!"
+          placeholder="Share your vision here. Our AI will refine and enhance your idea to create a stunning image, which will appear below in a few seconds!"
           className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 text-white h-28"
         />
         <div className="mt-4">
@@ -95,7 +95,8 @@ const ImageGenerator = () => {
             <img
               src={image}
               alt="Generated"
-              className="w-full max-w-lg rounded-lg shadow-lg"
+              className="w-full max-w-lg rounded-lg shadow-lg cursor-pointer"
+              onClick={() => setLightboxOpen(true)}
               onError={() => setError('Failed to load image')}
             />
           </div>
@@ -118,6 +119,12 @@ const ImageGenerator = () => {
           </div>
         )}
       </div>
+      {lightboxOpen && (
+        <Lightbox
+          mainSrc={image}
+          onCloseRequest={() => setLightboxOpen(false)}
+        />
+      )}
     </div>
   );
 };
