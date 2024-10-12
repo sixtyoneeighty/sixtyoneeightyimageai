@@ -33,7 +33,7 @@
     "tailwindcss-animate": "^1.0.7",
     "together-ai": "^0.6.0-alpha.3",
     "zod": "^3.23.8",
-    "yet-another-react-lightbox": "^2.10.0"
+    "yet-another-react-lightbox": "^3.21.6"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",
