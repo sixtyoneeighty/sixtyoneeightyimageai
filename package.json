@@ -16,7 +16,6 @@
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
-    "yet-another-react-lightbox": "^2.12.0",
     "@radix-ui/react-slot": "^1.1.0",
     "ai": "^3.4.9",
     "class-variance-authority": "^0.7.0",
@@ -33,7 +32,8 @@
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "together-ai": "^0.6.0-alpha.3",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "yet-another-react-lightbox": "^2.11.0"
   },
   "devDependencies": {
     "@types/node": "^20.12.0",
