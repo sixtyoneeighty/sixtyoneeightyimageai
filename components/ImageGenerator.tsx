@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Lightbox from 'react-image-lightbox';
-import 'react-image-lightbox/style.css';
+import Lightbox from 'yet-another-react-lightbox';
+import 'yet-another-react-lightbox/styles.css';
 
 const ImageGenerator = () => {
   const [prompt, setPrompt] = useState('');
@@ -123,8 +123,9 @@ const ImageGenerator = () => {
       </div>
       {lightboxOpen && (
         <Lightbox
-          mainSrc={image}
-          onCloseRequest={() => setLightboxOpen(false)}
+          open={lightboxOpen}
+          close={() => setLightboxOpen(false)}
+          slides={[{ src: image }]}
         />
       )}
     </div>
