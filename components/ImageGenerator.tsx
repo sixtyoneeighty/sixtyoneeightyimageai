@@ -121,7 +121,7 @@ const ImageGenerator = () => {
           </div>
         )}
       </div>
-      {lightboxOpen && (
+      {image && (
         <Lightbox
           open={lightboxOpen}
           close={() => setLightboxOpen(false)}
