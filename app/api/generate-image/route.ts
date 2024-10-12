@@ -98,7 +98,7 @@ export async function POST(req: Request) {
       model: "black-forest-labs/FLUX.1.1-pro",
       prompt: enhancedPrompt,
       width: 2048,
-      height: 1536,
+      height: 1152,
       steps: 1,
       n: 1
     });
