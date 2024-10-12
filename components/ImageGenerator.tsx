@@ -48,6 +48,17 @@ const ImageGenerator = () => {
     setPrompt('');
   };
 
+  const saveImage = () => {
+    if (image) {
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = 'generated-image.jpg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black">
       <Image
@@ -102,6 +113,14 @@ const ImageGenerator = () => {
               onError={() => setError('Failed to load image')}
             />
           </div>
+        )}
+        {image && (
+          <button
+            onClick={saveImage}
+            className="mt-4 w-full py-2 px-4 rounded-md text-white font-semibold bg-green-600 hover:bg-green-700"
+          >
+            Save Image
+          </button>
         )}
         {enhancedPrompt && (
           <div className="mt-4">
