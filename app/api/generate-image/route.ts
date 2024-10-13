@@ -97,17 +97,21 @@ export async function POST(req: Request) {
     const response = await together.images.create({
       model: "black-forest-labs/FLUX.1.1-pro",
       prompt: enhancedPrompt,
-      width: 1024,
-      height: 768,
+      width: 1440,
+      height: 800,
       steps: 1,
       n: 1
     });
 
     console.timeEnd('Image Generation'); // End time measurement
-    console.log(response.data[0].b64_json);
+    console.log('Together.ai API Full Response:', response); // Log the entire response object
+    if (!response || !response.data || !response.data[0] || !('url' in response.data[0])) {
+      throw new Error('Invalid response from Together.ai');
+    }
+
     return NextResponse.json({
       enhancedPrompt,
-      image: response.data[0].b64_json // Assuming the image is returned as base64
+      imageUrl: response.data[0].url // Corrected property access to `url`
     });
   } catch (error) {
     console.error('Error in prompt enhancement or image generation:', error);
