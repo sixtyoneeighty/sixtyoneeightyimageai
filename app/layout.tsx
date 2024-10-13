@@ -1,32 +1,23 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
-import { ThemeProvider } from "@/components/theme-provider";
+import { ReactNode } from 'react';
 
-const inter = Inter({ subsets: ['latin'] });
+interface LayoutProps {
+  children: ReactNode;
+}
 
-export const metadata = {
-  title: 'sixtyoneeighty AI Image Generator',
-  description: 'Generate images from text using AI',
-  manifest: '/manifest.json',
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: LayoutProps) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    <div
+      style={{
+        width: '100vw',        /* Full viewport width */
+        height: '100vh',       /* Full viewport height */
+        margin: '0',           /* Reset default margin */
+        padding: '0',          /* Reset default padding */
+        overflowX: 'hidden',   /* Disable horizontal scrolling */
+        display: 'flex',       /* Optional: Flexbox for layout */
+        flexDirection: 'column', /* Optional: Column-based layout */
+      }}
+    >
+      {children}
+    </div>
   );
 }
