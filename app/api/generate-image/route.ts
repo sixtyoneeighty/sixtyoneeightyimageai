@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       console.log('Attempting to enhance prompt with Gemini...');
       try {
         const promptInstructions = `
-        You are an AI assistant specializing in refining user prompts for the Flux image generation model.
+        You are an AI expert specializing in refining user prompts for the Flux image generation model.
         Create a detailed, structured description following this exact format:
 
         Topic: ${prompt}
