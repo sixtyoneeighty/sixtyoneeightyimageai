@@ -7,6 +7,13 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const together = new Together({ apiKey: process.env.TOGETHER_API_KEY });
 
+// Define interface for Together.ai response
+interface TogetherImageResponse {
+  data: Array<{
+    url: string;
+  }>;
+}
+
 export async function POST(req: Request) {
   try {
     const { prompt, skipEnhancement } = await req.json();
@@ -73,7 +80,7 @@ export async function POST(req: Request) {
         height: 800,
         steps: 1,
         n: 1
-      });
+      }) as TogetherImageResponse;
       console.log('Together.ai response:', response);
 
       if (!response?.data?.[0]?.url) {

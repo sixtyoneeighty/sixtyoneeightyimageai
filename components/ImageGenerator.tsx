@@ -95,7 +95,7 @@ const ImageGenerator = () => {
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 placeholder="Share your vision here. Our AI will refine and enhance your idea to create a stunning image."
-                className="min-h-[120px] resize-none bg-background/20 backdrop-blur-sm border-border/30 focus:border-primary/50 transition-colors duration-200 rounded-lg shadow-sm"
+                className="min-h-[120px] resize-none bg-white/5 backdrop-blur-sm border-2 border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all duration-200 rounded-lg shadow-sm"
               />
             </div>
 
