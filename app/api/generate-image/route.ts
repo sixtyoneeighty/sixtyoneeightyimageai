@@ -80,16 +80,18 @@ export async function POST(req: Request) {
         height: 800,
         steps: 1,
         n: 1
-      }) as TogetherImageResponse;
+      });
+      console.log('Full Together.ai response:', JSON.stringify(response, null, 2)); 
       console.log('Together.ai response:', response);
+      const togetherResponse = response as TogetherImageResponse;
 
-      if (!response?.data?.[0]?.url) {
+      if (!togetherResponse?.data?.[0]?.url) {
         throw new Error('No image URL in Together.ai response');
       }
 
       return NextResponse.json({
         enhancedPrompt,
-        imageUrl: response.data[0].url
+        imageUrl: togetherResponse.data[0].url
       });
     } catch (error: any) {
       console.error('Together.ai API error:', error.message);
