@@ -1,23 +1,29 @@
 import { ReactNode } from 'react';
+import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-export default function Layout({ children }: LayoutProps) {
+export const metadata = {
+  title: 'AI Image Generator',
+  description: 'Generate amazing images using AI',
+};
+
+export default function RootLayout({ children }: LayoutProps) {
   return (
-    <div
-      style={{
-        width: '100vw',        /* Full viewport width */
-        height: '100vh',       /* Full viewport height */
-        margin: '0',           /* Reset default margin */
-        padding: '0',          /* Reset default padding */
-        overflowX: 'hidden',   /* Disable horizontal scrolling */
-        display: 'flex',       /* Optional: Flexbox for layout */
-        flexDirection: 'column', /* Optional: Column-based layout */
-      }}
-    >
-      {children}
-    </div>
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-background">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

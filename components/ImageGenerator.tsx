@@ -4,6 +4,11 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const ImageGenerator = () => {
   const [prompt, setPrompt] = useState('');
@@ -12,14 +17,15 @@ const ImageGenerator = () => {
   const [error, setError] = useState<string | null>(null);
   const [enhancedPrompt, setEnhancedPrompt] = useState<string | null>(null);
   const [skipEnhancement, setSkipEnhancement] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
 
   const generateImage = async () => {
     setLoading(true);
     setError(null);
     setImage(null);
     try {
+      console.log('Sending request with prompt:', prompt); // Debug log
       const response = await fetch('/api/generate-image', {
         method: 'POST',
         headers: {
@@ -29,15 +35,17 @@ const ImageGenerator = () => {
       });
 
       const data = await response.json();
-      console.log('Image generation response:', data);
+      console.log('Response from server:', data); // Debug log
 
       if (response.ok && data.imageUrl) {
         setImage(data.imageUrl);
         setEnhancedPrompt(data.enhancedPrompt);
       } else {
+        console.error('Error response:', data); // Debug log
         setError(data.error || 'Failed to generate image');
       }
     } catch (err) {
+      console.error('Fetch error:', err); // Debug log
       setError('Failed to generate image');
     } finally {
       setLoading(false);
@@ -59,87 +67,110 @@ const ImageGenerator = () => {
     }
   };
 
+  const toggleOverlay = () => {
+    setOverlayVisible(!overlayVisible);
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black">
-      <Image
-        src="/images/logo.png"
-        alt="Logo"
-        width={400}
-        height={200}
-        className="mb-8"
-      />
-      <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg">
-        <label className="block mb-2 text-gray-700 font-semibold">Prompt:</label>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="Share your vision here. Our AI will refine and enhance your idea to create a stunning image, which will appear below in a few seconds!"
-          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500 text-white h-28"
-        />
-        <div className="mt-4">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              checked={skipEnhancement}
-              onChange={(e) => setSkipEnhancement(e.target.checked)}
-              className="form-checkbox"
-            />
-            <span className="ml-2 text-gray-700">Skip Prompt Enhancement</span>
-          </label>
-        </div>
-        <button
-          onClick={generateImage}
-          disabled={loading}
-          className={`mt-4 w-full py-2 px-4 rounded-md text-white font-semibold ${
-            loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
-          }`}
-        >
-          {loading ? 'Generating...' : 'Generate Image'}
-        </button>
-        <button
-          onClick={clearPrompt}
-          className="mt-2 w-full py-2 px-4 rounded-md text-white font-semibold bg-gray-700 hover:bg-gray-800"
-        >
-          Clear
-        </button>
-        {error && <p className="text-red-500 mt-4">{error}</p>}
-        {image && (
-          <div className="mt-8">
-            <img
-              src={image}
-              alt="Generated"
-              className="w-full max-w-lg rounded-lg shadow-lg cursor-pointer"
-              onClick={() => setLightboxOpen(true)}
-              onError={() => setError('Failed to load image')}
+    <div className="flex h-screen overflow-hidden bg-background">
+      {/* Sidebar */}
+      <div className="w-[350px] min-w-[350px] h-screen border-r border-border bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-8 overflow-y-auto">
+        <div className="space-y-16">
+          <div className="flex justify-center pt-8">
+            <Image
+              src="/images/logo.png"
+              alt="Logo"
+              width={200}
+              height={100}
+              className="w-[180px] h-auto"
+              priority
             />
           </div>
-        )}
-        {image && (
-          <button
-            onClick={saveImage}
-            className="mt-4 w-full py-2 px-4 rounded-md text-white font-semibold bg-black hover:bg-gray-800"
-          >
-            Save Image
-          </button>
-        )}
-        {enhancedPrompt && (
-          <div className="mt-4">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="w-full py-2 px-4 rounded-md text-white font-semibold bg-indigo-600 hover:bg-indigo-700"
-            >
-              {dropdownOpen ? 'Hide Enhanced Prompt' : 'Click to see your enhanced prompt'}
-            </button>
-            {dropdownOpen && (
-              <div className="mt-4 p-4 bg-gray-50 rounded-md">
-                <p className="text-indigo-700">
-                  <strong>Enhanced Prompt:</strong> {enhancedPrompt}
-                </p>
+
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <Label htmlFor="prompt">Your Vision</Label>
+              <Textarea
+                id="prompt"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="Share your vision here. Our AI will refine and enhance your idea to create a stunning image."
+                className="min-h-[120px] resize-none bg-background/50"
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="skip-enhancement"
+                checked={skipEnhancement}
+                onCheckedChange={(checked) => setSkipEnhancement(checked as boolean)}
+              />
+              <Label htmlFor="skip-enhancement" className="text-sm">Skip Prompt Enhancement</Label>
+            </div>
+
+            <div className="space-y-4">
+              <Button onClick={generateImage} disabled={loading || !prompt.trim()} className="w-full">
+                {loading ? "Generating..." : "Generate Image"}
+              </Button>
+              <Button onClick={clearPrompt} variant="outline" className="w-full" disabled={!prompt.trim()}>
+                Clear
+              </Button>
+            </div>
+
+            {error && (
+              <div className="p-4 rounded-lg bg-destructive/10 text-destructive text-sm">
+                {error}
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* Main Canvas Area */}
+      <div className="flex-1 h-screen overflow-hidden p-6 flex items-center justify-center bg-background/95">
+        {image ? (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <div className="group relative max-w-[90%] max-h-[90%]">
+              <img
+                src={image}
+                alt="Generated"
+                className="rounded-lg shadow-xl max-w-full max-h-[85vh] object-contain"
+                onClick={() => setLightboxOpen(true)}
+              />
+              {overlayVisible && (
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                  <div className="text-white p-4">
+                    <p>{enhancedPrompt}</p>
+                    <button onClick={toggleOverlay} className="mt-2 text-sm text-gray-300">Close</button>
+                  </div>
+                </div>
+              )}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  onClick={saveImage}
+                  variant="secondary"
+                  className="shadow-lg"
+                >
+                  Download Image
+                </Button>
+                <Button
+                  onClick={toggleOverlay}
+                  variant="secondary"
+                  className="shadow-lg"
+                >
+                  View Enhanced Prompt
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center text-muted-foreground">
+            <p className="text-lg">Your generated image will appear here</p>
+            <p className="text-sm mt-2">Enter a prompt in the sidebar to get started</p>
+          </div>
         )}
       </div>
+
       {image && (
         <Lightbox
           open={lightboxOpen}
