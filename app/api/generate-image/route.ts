@@ -83,7 +83,7 @@ export async function POST(req: Request) {
       });
       console.log('Full Together.ai response:', JSON.stringify(response, null, 2)); 
       console.log('Together.ai response:', response);
-      const togetherResponse = response as TogetherImageResponse;
+      const togetherResponse = response as unknown as TogetherImageResponse;
 
       if (!togetherResponse?.data?.[0]?.url) {
         throw new Error('No image URL in Together.ai response');
